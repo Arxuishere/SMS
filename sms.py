@@ -1,5 +1,8 @@
 import requests
 import time
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 # Initialize message count
 message_count = 0
